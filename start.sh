@@ -37,7 +37,10 @@ fi
 GetDistName
 
 #install 
-$PM install -y git curl
+$PM install -y git curl ctags cscope unzip
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+#download taglist
+curl -LSso $HOME/.vim/taglist.zip https://vim.sourceforge.io/scripts/download_script.php?src_id=19574
+cd $HOME/.vim/ && unzip taglist.zip && rm $HOME/.vim/taglist.zip
 vim -c "silent !ls" -c 'PluginInstall' -c 'qa!'
