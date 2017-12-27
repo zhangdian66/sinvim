@@ -16,6 +16,8 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'tomasr/molokai'
 Plugin 'jiangmiao/auto-pairs'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
 
 
 if filereadable(expand("~/.vimrc.bundles.local"))
