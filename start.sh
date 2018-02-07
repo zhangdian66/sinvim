@@ -1,4 +1,11 @@
-#!/bin/sh
+#!/bin/bash
+
+declare -a gCommandList=("git" "unzip"
+                        "vim" "curl" 
+                        )
+DISTRO=
+PM=
+
 CpFile() {
     objs=".vimrc .vimrc.bundles"
     for file in $objs; do
@@ -11,8 +18,6 @@ CpFile() {
     return 0
 }
 
-DISTRO=
-PM=
 #detect the system and software
 GetDistName() {
     Issuefile=/etc/issue
@@ -29,12 +34,35 @@ GetDistName() {
     done
 }
 
+CheckCommand() {
+    local cmd
+    for cmd in ${gCommandList[@]}; do
+        which $cmd >/dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            $PM install $cmd > /dev/null 2>&1
+        fi
+        ##check again
+        which $cmd >/dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo "Failed to install $cmd"
+            exit 1
+        fi
+    done
+    return 0
+}
+
+
+############## MAIN FUNCTION #############################
+
+
+
 CpFile
 if [ $? != 0 ]; then
     echo "File not exists.\n" 
     exit 1
 fi
 GetDistName
+CheckCommand
 
 #install 
 $PM install -y git curl ctags cscope unzip
