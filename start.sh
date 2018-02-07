@@ -1,8 +1,6 @@
 #!/bin/bash
 
-declare -a gCommandList=("git" "unzip"
-                        "vim" "curl" 
-                        )
+declare -a gCommandList=("git" "unzip" "vim" "curl")
 DISTRO=
 PM=
 
