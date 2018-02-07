@@ -1,6 +1,8 @@
 #!/bin/bash
 
-declare -a gCommandList=("git" "zip" "vim" "curl")
+gCommandList=("git" "zip" "vim" "curl")
+gDebianList=("git" "zip" "vim" "curl")
+gRedHatList=("git" "zip.x86_64" "vim" "curl")
 DISTRO=
 PM=
 
@@ -20,24 +22,29 @@ CpFile() {
 GetDistName() {
     Issuefile=/etc/issue
     ReleaseFile=/etc/*-release
-    for dis in "Ubuntu" "Debian" "Centos"; do
+    for dis in "Ubuntu" "Debian" "Centos" "Oracle Linux"; do
         if grep -Eqi $dis $Issuefile || grep -Eq $dis $ReleaseFile; then
             DISTRO=$dis
-            if [ "$dis" = "Centos" ]; then
-                PM="yum"
-            else
-                PM="apt"
-            fi
+            case $dis in
+                "Centos") PM="yum";;
+                "Oracle Linux") PM="yum";;
+                *) PM="apt";;
+            esac
         fi
     done
 }
 
 CheckCommand() {
     local cmd
+    local idx=0
     for cmd in ${gCommandList[@]}; do
         which $cmd >/dev/null 2>&1
         if [ $? -ne 0 ]; then
-            $PM install $cmd > /dev/null 2>&1
+            if [ "x$dis" = "xCentos" ]; then
+                yes | $PM install ${gRedHatList[$idx]}
+            else
+                yes | $PM install ${gDebianList[$idx]}
+            fi
         fi
         ##check again
         which $cmd >/dev/null 2>&1
@@ -45,6 +52,7 @@ CheckCommand() {
             echo "Failed to install $cmd"
             exit 1
         fi
+        idx=$idx+1
     done
     return 0
 }
