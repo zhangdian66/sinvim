@@ -114,3 +114,69 @@ let Tlist_File_Folder_Auto_Close = 1 " only show the last windows when several f
 "\cc for comment
 "\cu for uncomment
 
+""""""""""""""""""""Generate Header Automatically"""""""""""""""""""""""""""
+map <F4> :call TitleDet()<CR>
+
+function AddTitleForC()
+    call append(0,"/*===================================================================")
+    call append(1,"#    Copyright(C) ".strftime("%Y")."  All rights reserved")
+    call append(2,"#")
+    call append(3,"#    @auther:        Dian")
+    call append(4,"#    @file:          ".expand("%:t"))
+    call append(5,"#    @create date:   ".strftime("%Y-%m-%d %H-%M"))
+    call append(6,"#    @last change:   ".strftime("%Y-%m-%d %H-%M"))
+    call append(7,"#    @Function:      ")
+    call append(8,"===================================================================*/")
+    call append(9,"")
+    echohl WarningMsg | echo "Successful in adding copyright." | echohl None
+endfunction
+
+function AddTitleForShell()
+    call append(0,"#====================================================================")
+    call append(1,"#    Copyright(C) ".strftime("%Y")."  All rights reserved")
+    call append(2,"#")
+    call append(3,"#    @auther:        Dian")
+    call append(4,"#    @file:          ".expand("%:t"))
+    call append(5,"#    @create date:   ".strftime("%Y-%m-%d %H-%M"))
+    call append(6,"#    @last change:   ".strftime("%Y-%m-%d %H-%M"))
+    call append(7,"#    @Function:      ")
+    call append(8,"#====================================================================")
+    call append(9,"")
+    echohl WarningMsg | echo "Successful in adding copyright." | echohl None
+endfunction
+
+function AddTitle()
+    if &filetype=='c'
+        call AddTitleForC()
+    elseif &filetype == 'c++'
+        call AddTitleForC()
+    elseif &filetype == 'make'
+        call AddTitleForShell()
+    elseif &filetype == 'sh'
+        call AddTitleForShell()
+    endif
+endfunction
+
+"update the revision time and filename
+function UpdateTitle()
+    normal m'
+    execute'/#    @last change   /s@:.*$@\=strftime("%Y-%m-%d %H-%m")@'
+    normal "
+    normal mk
+    execute '/#       @file      /s@:.*$@\=":".expand("%:p:h")."\\".expand("%:t")@'  
+    execute "noh"  
+    normal 'k
+    echohl WarningMsg | echo "Successful in updating the copy right." | echohl None
+endfunction
+
+function TitleDet()
+    let n=2
+    let line=getline(n)
+    let str='^#\s+auther:\s+Dian$'
+    if line =~ str
+        call UpdateTitle()
+        return
+    endif
+    call AddTitle()
+endfunction
+
