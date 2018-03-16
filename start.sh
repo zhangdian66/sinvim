@@ -56,6 +56,9 @@ CheckCommand() {
     done
     return 0
 }
+UpdateSoftware() {
+    yes | $PM install  nss curl libcurl
+}
 
 
 ############## MAIN FUNCTION #############################
@@ -69,6 +72,7 @@ if [ $? != 0 ]; then
 fi
 GetDistName
 CheckCommand
+UpdateSoftware
 
 #install 
 $PM install -y git curl ctags cscope unzip
