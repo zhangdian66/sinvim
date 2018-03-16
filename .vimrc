@@ -73,6 +73,7 @@ set autochdir
 " -i: input files
 " -I: file path
 " -C: ignore char
+set nocscopeverbose
 if has("cscope")
     set cscopetag "enable ctrl+] and ctrl+t/o
     "check cscope before checking ctags, set csto=1 to reverse
@@ -111,6 +112,10 @@ let Tlist_Auto_Open = 1	    "open taglist when open vim
 let Tlist_File_Folder_Auto_Close = 1 " only show the last windows when several files open
 
 """"""注释 NERDCOMMENT"""""""""""
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeGlyphReadOnly = "RO"
 "\cc for comment
 "\cu for uncomment
 
